@@ -19,7 +19,7 @@ function b64urlEncode(bytes: Uint8Array): string {
     .replace(/=/g, "");
 }
 
-function b64urlDecode(str: string): Uint8Array {
+function b64urlDecode(str: string): ArrayBuffer {
   const padded = str.replace(/-/g, "+").replace(/_/g, "/");
   const pad = (4 - (padded.length % 4)) % 4;
 
@@ -31,7 +31,7 @@ function b64urlDecode(str: string): Uint8Array {
     bytes[i] = binary.charCodeAt(i);
   }
 
-  return bytes;
+  return bytes.buffer;
 }
 
 function encodeJSON(obj: unknown): Uint8Array {
@@ -109,19 +109,21 @@ export async function verifyToken(
 
   const key = await importHmacKey(getSecret());
 
+  const signature = b64urlDecode(sig);
+
   const valid = await globalThis.crypto.subtle.verify(
-    "HMAC",
-    key,
-    b64urlDecode(sig),
-    new TextEncoder().encode(`${header}.${body}`)
-  );
+     "HMAC",
+     key,
+     signature,
+     new TextEncoder().encode(`${header}.${body}`)
+    );
 
   if (!valid) {
     throw new Error("Invalid signature");
   }
 
   const payload = decodeJSON<JwtPayload>(
-    b64urlDecode(body)
+    new Uint8Array(b64urlDecode(body))
   );
 
   if (
