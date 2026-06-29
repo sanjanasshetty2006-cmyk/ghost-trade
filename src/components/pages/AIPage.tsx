@@ -27,7 +27,13 @@ export default function AIPage() {
   const [input, setInput] = useState("");
   const [loadingReport, setLoadingReport] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeader: Record<string, string> = {
+  "Content-Type": "application/json",
+};
+
+if (token) {
+  authHeader.Authorization = `Bearer ${token}`;
+}
 
   function scrollBottom() {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
@@ -45,7 +51,7 @@ export default function AIPage() {
     try {
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { ...authHeader, "Content-Type": "application/json" },
+        headers: authHeader,
         body: JSON.stringify({ message: text }),
       });
       const json = await res.json();
@@ -64,7 +70,7 @@ export default function AIPage() {
     try {
       const res = await fetch("/api/ai/report", {
         method: "POST",
-        headers: { ...authHeader, "Content-Type": "application/json" },
+        headers: authHeader,
         body: JSON.stringify({ reportType: type }),
       });
       const json = await res.json();
