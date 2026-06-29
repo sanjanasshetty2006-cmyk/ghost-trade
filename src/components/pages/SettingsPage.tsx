@@ -14,6 +14,7 @@ export default function SettingsPage() {
 
     if (token) {
        authHeader.Authorization = `Bearer ${token}`;
+    }
 
 
   async function save() {
@@ -134,4 +135,4 @@ export default function SettingsPage() {
       </motion.button>
     </div>
   );
-}
+} 
