@@ -11,6 +11,7 @@ export interface User {
   streak: number;
   ghostMode: boolean;
   createdAt: string;
+  totalTrades?: number;
 }
 
 export interface AuthState {
