@@ -6,12 +6,15 @@ import HoldingModel from "@/models/Holding";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    const group = await GroupModel.findById(params.id);
+    // Next.js 15 dynamic route params
+    const { id } = await context.params;
+
+    const group = await GroupModel.findById(id);
 
     if (!group) {
       return NextResponse.json(
@@ -35,7 +38,7 @@ export async function GET(
 
         const portfolioValue =
           holdings.reduce(
-            (sum, h) => sum + h.avgBuyPrice * h.quantity,
+            (sum: number, h: any) => sum + h.avgBuyPrice * h.quantity,
             0
           ) + user.cashBalance;
 
@@ -61,9 +64,9 @@ export async function GET(
     );
 
     const ranked = leaderboard
-      .filter(Boolean)
-      .sort((a: any, b: any) => b.returns - a.returns)
-      .map((e: any, i: number) => ({
+      .filter((e): e is NonNullable<typeof e> => e !== null)
+      .sort((a, b) => b.returns - a.returns)
+      .map((e, i) => ({
         ...e,
         rank: i + 1,
       }));
@@ -79,7 +82,6 @@ export async function GET(
         leaderboard: ranked,
       },
     });
-
   } catch (err) {
     console.error(err);
 

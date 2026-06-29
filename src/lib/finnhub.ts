@@ -5,6 +5,18 @@ console.log("FINNHUB KEY EXISTS:", !!FINNHUB_KEY);
 console.log("FINNHUB KEY LENGTH:", FINNHUB_KEY.length);
 const BASE = "https://finnhub.io/api/v1";
 
+export async function getMarketNews() {
+  try {
+    const news = await finnhub("/news", {
+      category: "general",
+    });
+
+    return news;
+  } catch (err) {
+    console.error("Market news error:", err);
+    return [];
+  }
+}
 async function finnhub(
   path: string,
   params: Record<string, string | number> = {}
@@ -96,4 +108,5 @@ export async function getQuote(
     console.error("GETQUOTE ERROR:", err);
     return null;
   }
+  
 }
