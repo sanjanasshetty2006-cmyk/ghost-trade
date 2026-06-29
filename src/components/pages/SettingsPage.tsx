@@ -10,7 +10,11 @@ export default function SettingsPage() {
   const [college, setCollege]       = useState(user?.college ?? "");
   const [ghostMode, setGhostMode]   = useState(user?.ghostMode ?? false);
   const [saving, setSaving]         = useState(false);
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeader: Record<string, string> = {};
+
+    if (token) {
+       authHeader.Authorization = `Bearer ${token}`;
+
 
   async function save() {
     setSaving(true);

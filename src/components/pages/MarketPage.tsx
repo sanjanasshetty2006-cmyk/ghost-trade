@@ -29,7 +29,11 @@ export default function MarketPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeader: Record<string, string> = {};
+
+  if (token) {
+     authHeader.Authorization = `Bearer ${token}`;
+  }
 
   const fetchMarket = useCallback(async () => {
     try {

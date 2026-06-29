@@ -32,7 +32,11 @@ export default function TradePage() {
   const [flash, setFlash] = useState<"" | "green" | "red">("");
   const [aiAnalysis, setAiAnalysis] = useState("");
 
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeader: Record<string, string> = {};
+
+    if (token) {
+      authHeader.Authorization = `Bearer ${token}`;
+    }
 
   const fetchQuote = useCallback(async () => {
     if (!tradeSymbol) return;
