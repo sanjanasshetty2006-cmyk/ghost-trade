@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
         }
       );
       const json = await res.json();
-      if (json.success) { setEntries(json.data.leaderboard); setMyRank(json.data.myRank); }
+      if (json.success) { setEntries(json.data?.leaderboard ?? []); setMyRank(json.data?.myRank ?? null);}
     } catch { /* silent */ }
     finally { setLoading(false); }
   }, [token, tabName]);
@@ -123,8 +123,8 @@ const joinGroup = async () => {
     return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
   }
 
-  const top3 = entries.slice(0, 3);
-  const rest  = entries.slice(3);
+  const top3 = (entries ?? []).slice(0, 3);
+  const rest = (entries ?? []).slice(3);
 
   return (
     <div className="page-enter px-6 py-5">

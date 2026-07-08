@@ -10,7 +10,7 @@ import DashboardPage from "@/components/pages/DashboardPage";
 import MarketPage from "@/components/pages/MarketPage";
 import TradePage from "@/components/pages/TradePage";
 import AIPage from "@/components/pages/AIPage";
-import LeaderboardPage from "@/components/pages/LeaderboardPage";
+import LeaderboardPage from "@/components/pages/leaderboard/LeaderboardPage";
 import LearnPage from "@/components/pages/LearnPage";
 import SettingsPage from "@/components/pages/SettingsPage";
 
