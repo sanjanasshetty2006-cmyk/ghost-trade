@@ -1,19 +1,16 @@
-// ── Leaderboard entry returned by the API ─────────────────────────────────────
 export interface LeaderboardEntry {
   rank:           number;
   userId:         string;
-  name:           string;         // "Ghost Trader 👻" when ghostMode
-  initials:       string;         // for avatar
-  college:        string;         // "Anonymous" when ghostMode
+  name:           string;
+  initials:       string;
+  college:        string;
   portfolioValue: number;
   returnsPercent: number;
   totalPnl:       number;
-  realizedPnl:    number;
-  unrealizedPnl:  number;
   cashBalance:    number;
   totalTrades:    number;
   winningTrades:  number;
-  winRate:        number;         // 0–100
+  winRate:        number;
   xp:             number;
   level:          number;
   ghostMode:      boolean;
@@ -22,56 +19,38 @@ export interface LeaderboardEntry {
   createdAt:      string;
 }
 
-// ── User profile drawer data ───────────────────────────────────────────────────
 export interface LeaderboardUserProfile extends LeaderboardEntry {
-  achievements:  string[];
-  topHoldings:   Array<{
-    symbol:       string;
-    companyName:  string;
-    currentValue: number;
-    pnlPercent:   number;
-    pnl:          number;
-  }>;
-  recentTrades:  Array<{
-    _id:          string;
-    symbol:       string;
-    type:         "BUY" | "SELL";
-    quantity:     number;
-    price:        number;
-    total:        number;
-    createdAt:    string;
-  }>;
+  achievements:     string[];
+  topHoldings:      TopHolding[];
+  recentTrades:     RecentTrade[];
   sectorAllocation: Record<string, number>;
 }
 
-// ── Stats cards ───────────────────────────────────────────────────────────────
-export interface LeaderboardStats {
-  totalPlayers:    number;
-  highestPortfolio: number;
-  averageReturn:   number;
-  highestXp:       number;
-  todayTopGainer:  { name: string; returnsPercent: number } | null;
-  todayTopLoser:   { name: string; returnsPercent: number } | null;
+export interface TopHolding {
+  symbol:       string;
+  companyName:  string;
+  currentValue: number;
+  pnlPercent:   number;
+  pnl:          number;
 }
 
-// ── API query params ──────────────────────────────────────────────────────────
-export type LeaderboardType = "global" | "weekly" | "monthly" | "alltime" | "college" | "friends";
-export type LeaderboardSortBy =
-  | "portfolioValue"
-  | "returnsPercent"
-  | "totalPnl"
-  | "xp"
-  | "level"
-  | "totalTrades"
-  | "winRate";
+export interface RecentTrade {
+  _id:       string;
+  symbol:    string;
+  type:      "BUY" | "SELL";
+  quantity:  number;
+  price:     number;
+  total:     number;
+  createdAt: string;
+}
 
-export interface LeaderboardQuery {
-  type?:    LeaderboardType;
-  sortBy?:  LeaderboardSortBy;
-  college?: string;
-  search?:  string;
-  page?:    number;
-  limit?:   number;
+export interface LeaderboardStats {
+  totalPlayers:     number;
+  highestPortfolio: number;
+  averageReturn:    number;
+  highestXp:        number;
+  todayTopGainer:   { name: string; returnsPercent: number } | null;
+  todayTopLoser:    { name: string; returnsPercent: number } | null;
 }
 
 export interface LeaderboardResponse {
@@ -81,4 +60,21 @@ export interface LeaderboardResponse {
   totalPages: number;
   myEntry:    LeaderboardEntry | null;
   stats:      LeaderboardStats;
+}
+
+export type LeaderboardType   = "global" | "weekly" | "monthly" | "alltime" | "friends";
+export type LeaderboardSortBy = "returnsPercent" | "portfolioValue" | "totalPnl" | "xp" | "level" | "totalTrades" | "winRate";
+
+export interface GroupData {
+  _id:         string;
+  name:        string;
+  inviteCode:  string;
+  ownerId:     string;
+  memberCount: number;
+  role:        "owner" | "member";
+  createdAt:   string;
+}
+
+export interface GroupMemberEntry extends LeaderboardEntry {
+  joinedAt: string;
 }
